@@ -1,7 +1,7 @@
+import time
 import json
 import socket
 import struct
-import time
 import hashlib
 
 download_dir = r'C:\Users\LIU\Desktop\download'  # 文件存放地址
@@ -42,10 +42,10 @@ while True:
             f.write(res)
             m.update(res)
             recv_size += len(res)
-    pc.send('True'.encode('utf-8'))
+    pc.send('True'.encode('utf-8'))  # 向服务器发送数据接收完成的信号
     EndTime = time.perf_counter()
     Time = EndTime - StartTime
-    recv_md5 = m.hexdigest()
+    recv_md5 = m.hexdigest()  # 返回摘要，作为十六进制数据字符串值
     recv_server_md5 = pc.recv(1024).decode("utf-8")
     print(recv_md5, '\n', recv_server_md5)
     if recv_md5 == recv_server_md5:

@@ -2,6 +2,7 @@ import json
 import socket
 import struct
 import time
+import hashlib
 
 download_dir = r'C:\Users\LIU\Desktop\download'  # 文件存放地址
 
@@ -32,15 +33,23 @@ while True:
     file_name = header_dic['filename']
 
     # 4 接受真实的数据
+    m = hashlib.md5()  # MD5验证
     with open('%s/%s' % (download_dir, file_name), 'wb') as f:
         recv_size = 0
         StartTime = time.perf_counter()
         while recv_size < total_size:
             res = pc.recv(1024)
             f.write(res)
+            m.update(res)
             recv_size += len(res)
-        EndTime = time.perf_counter()
-        Time = EndTime - StartTime
-    print('总大小：%s  已经下载大小：%s' '总用时：%s' % (total_size, recv_size, Time))
-
+    pc.send('True'.encode('utf-8'))
+    EndTime = time.perf_counter()
+    Time = EndTime - StartTime
+    recv_md5 = m.hexdigest()
+    recv_server_md5 = pc.recv(1024).decode("utf-8")
+    print(recv_md5, '\n', recv_server_md5)
+    if recv_md5 == recv_server_md5:
+        print('总大小：%s  已经下载大小：%s' '总用时：%s' % (total_size, recv_size, Time))
+    else:
+        print('MD5验证错误')
 pc.close()

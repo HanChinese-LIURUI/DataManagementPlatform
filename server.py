@@ -1,14 +1,14 @@
 import os
+import time
 import json
 import socket
 import struct
 import hashlib
 
-share_dir = r'C:\Users\Administrator\Desktop'  # 需要传输的文件所在的文件夹
-
+share_dir = r'D:\新建文件夹'  # 需要传输的文件所在的文件夹
 phone = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 建立一个socket对象
 phone.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # 回收重用端口10000
-phone.bind(('192.168.3.6', 10000))  # 0-65535  0-1024给操作系统，
+phone.bind(('192.168.3.42', 10000))  # 0-65535  0-1024给操作系统，
 phone.listen(5)
 print('服务器已启动，等待连接')
 while True:  # 建链接循环
@@ -52,4 +52,4 @@ while True:  # 建链接循环
             print('Error:', e)
             break
     conn.close()
-phone.close()
+# phone.close()
